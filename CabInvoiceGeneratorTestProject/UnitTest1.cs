@@ -25,14 +25,15 @@ namespace CabInvoiceGeneratorTestProject
         [Test]
         public void Given_Multiple_Rides_Return_TotalFare()
         {
-            //Arrange
-            double expected = 88;
-            Ride[] rides = { new Ride(5, 2, RideType.NORMAL), new Ride(2, 3, RideType.PREMIUM) };                    
+            //Arrange           
+            Ride[] rides = { new Ride(5, 2, RideType.NORMAL), new Ride(2, 3, RideType.PREMIUM) };
+            InvoiceSummary expected = new InvoiceSummary(88, rides.Length);
+
             // Act
-            double actual = invoice.CalculateFare(rides);
+            InvoiceSummary actual = invoice.CalculateFare(rides);
             //Assert
             Assert.AreEqual(expected, actual);
-
+            //expected.Equals(actual);
         }
     }
 }
