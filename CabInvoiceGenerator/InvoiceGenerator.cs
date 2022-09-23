@@ -8,40 +8,28 @@ namespace CabInvoiceGenerator
 {
     public class InvoiceGenerator
     {
-        public readonly int MINIMUM_FARE;
-        public readonly int COST_PER_KM;
-        public readonly int COST_PER_MINUTE;
-        public RideType rideType;
-
-        public InvoiceGenerator(RideType rideType)
-        {
-            this.rideType = rideType;
-            if (rideType == RideType.NORMAL)
-            {
-                MINIMUM_FARE = 5;
-                COST_PER_KM = 10;
-                COST_PER_MINUTE = 1;
-            }
-            else
-            {
-                MINIMUM_FARE = 20;
-                COST_PER_KM = 15;
-                COST_PER_MINUTE = 2;
-            }
-        }
-
-        public double CalculateFare(double distance, int time)
+        public double CalculateFare(Ride ride)
         {
             double totalFare;
-            if (distance < 0)
+            if (ride.distance < 0)
                 throw new CabInvoiceCustomException(CabInvoiceCustomException.ExceptionType.INVALID_DISTANCE, "Distance cannot be zero");
-            else if (time < 0)
+            else if (ride.time < 0)
                 throw new CabInvoiceCustomException(CabInvoiceCustomException.ExceptionType.INVALID_TIME, "Time cannot be zero");
             else
             {
-                totalFare = distance *COST_PER_KM + time *COST_PER_MINUTE;  
+                totalFare = ride.distance *ride.COST_PER_KM + ride.time *ride.COST_PER_MINUTE;  
             }
-            return Math.Max(totalFare, MINIMUM_FARE);
+            return Math.Max(totalFare, ride.MINIMUM_FARE);
+        }
+
+        public double CalculateFare(Ride[] rides)
+        {
+            double totalFare = 0;
+            foreach (Ride ride in rides)
+            {
+                totalFare += CalculateFare(ride);
+            }
+            return totalFare;
         }
     }
 }
